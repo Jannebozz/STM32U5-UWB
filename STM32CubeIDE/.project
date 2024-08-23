@@ -215,9 +215,74 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/app_freertos.c</locationURI>
 		</link>
 		<link>
+			<name>Application/User/Core/crc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/crc.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/dcache.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/dcache.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/dma2d.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/dma2d.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/gpdma.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/gpdma.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/gpio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/gpio.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/gpu2d.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/gpu2d.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/hspi.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/hspi.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/i2c.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/i2c.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/icache.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/icache.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/jpeg.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/jpeg.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/ltdc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/ltdc.c</locationURI>
+		</link>
+		<link>
 			<name>Application/User/Core/main.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/main.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/memorymap.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/memorymap.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/spi.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/spi.c</locationURI>
 		</link>
 		<link>
 			<name>Application/User/Core/stm32u5xx_hal_msp.c</name>

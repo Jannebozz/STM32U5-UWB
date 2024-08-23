@@ -85,7 +85,7 @@
 									<listOptionValue builtIn="false" value="../../TouchGFX/generated/texts/include"/>
 									<listOptionValue builtIn="false" value="../../TouchGFX/generated/videos/include"/>
 									<listOptionValue builtIn="false" value="../../TouchGFX/gui/include"/>
-									<listOptionValue builtIn="false" value="../../Middlewares/ST/touchgfx_components/gpu2d/TouchGFXNema/include"/>
+									<listOptionValue builtIn="false" value="../../Middlewares/ST/touchgfx_components/gpu2d/NemaGFX/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/spark/app/example/hello_world}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/spark/bsp/hardware/myevk}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Middlewares/spark/bsp/interface/app/hello_world}&quot;"/>

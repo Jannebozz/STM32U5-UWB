@@ -12,12 +12,10 @@
 #include "myevk_radio.h"
 #include "uwb_task.h"
 #include "spi.h"
-#include "jpeg_lcd.h"
 #include "../../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
 /* PRIVATE GLOBALS ************************************************************/
 
-DMA_HandleTypeDef  hradio_dma_spi_rx;
-DMA_HandleTypeDef  hradio_dma_spi_tx;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel2;
 
 typedef struct
 {
@@ -39,22 +37,21 @@ bool myevk_radio_read_irq_pin(void)
 
 void myevk_radio_enable_irq_it(void)
 {
-	SET_BIT(EXTI_D1->IMR1, SR1020_INT_Pin);
+	HAL_NVIC_EnableIRQ(EXTI6_IRQn);
 }
 
 void myevk_radio_disable_irq_it(void)
 {
-	CLEAR_BIT(EXTI_D1->IMR1, SR1020_INT_Pin);
-	SET_BIT(EXTI_D1->PR1, SR1020_INT_Pin);
+	HAL_NVIC_DisableIRQ(EXTI6_IRQn);
 }
 void myevk_radio_enable_dma_irq_it(void)
 {
-    NVIC_EnableIRQ(DMA1_Stream2_IRQn);
+    NVIC_EnableIRQ(GPDMA1_Channel2_IRQn);
 }
 
 void myevk_radio_disable_dma_irq_it(void)
 {
-    NVIC_DisableIRQ(DMA1_Stream2_IRQn);
+    NVIC_DisableIRQ(GPDMA1_Channel2_IRQn);
 }
 
 void myevk_radio_set_shutdown_pin(void)
@@ -90,15 +87,15 @@ void myevk_radio_spi_reset_cs(void)
 
 void myevk_radio_spi_transfer_full_duplex_blocking(uint8_t *tx_data, uint8_t *rx_data, uint16_t size)
 {
-    HAL_SPI_TransmitReceive(&hspi2, tx_data,rx_data,size,10);
+    HAL_SPI_TransmitReceive(&hspi1, tx_data,rx_data,size,10);
 }
 
 void myevk_radio_spi_transfer_full_duplex_non_blocking(uint8_t *tx_data, uint8_t *rx_data, uint16_t size)
 {
 #ifdef USE_ST_HAL_SPI_DRIVER
     myevk_radio_spi_reset_cs();
-    HAL_SPI_TransmitReceive_DMA(&hspi2, tx_data,rx_data,size);
-    __HAL_DMA_DISABLE_IT(&hradio_dma_spi_rx, DMA_IT_HT);
+    HAL_SPI_TransmitReceive_DMA(&hspi1, tx_data,rx_data,size);
+    __HAL_DMA_DISABLE_IT(&handle_GPDMA1_Channel2, DMA_IT_HT);
 
 #else
     SCB_CleanDCache_by_Addr((uint32_t*)(((uint32_t)tx_data) & ~(uint32_t)0x1F),size + 32);
@@ -168,7 +165,7 @@ void myevk_radio_spi_transfer_full_duplex_non_blocking(uint8_t *tx_data, uint8_t
 
 bool myevk_radio_is_spi_busy(void)
 {
-	return (&hspi2)->State == HAL_SPI_STATE_BUSY_TX_RX;
+	return (&hspi1)->State == HAL_SPI_STATE_BUSY_TX_RX;
 }
 
 void myevk_radio_context_switch(void)

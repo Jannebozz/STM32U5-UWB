@@ -86,6 +86,7 @@ void Error_Handler(void);
 #define SR1020_SHDWN_GPIO_Port GPIOG
 #define SR1020_INT_Pin GPIO_PIN_6
 #define SR1020_INT_GPIO_Port GPIOB
+#define SR1020_INT_EXTI_IRQn EXTI6_IRQn
 
 /* USER CODE BEGIN Private defines */
 

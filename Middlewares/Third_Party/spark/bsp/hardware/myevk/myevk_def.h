@@ -12,6 +12,7 @@
 /* INCLUDES *******************************************************************/
 #include <stdbool.h>
 #include <stdint.h>
+#include "main.h" 				//To get access to pin definitions
 #include "stm32u5xx_hal.h"
 #include "stm32u5xx_hal_spi.h"
 

@@ -15,22 +15,17 @@
 #include "swc_api.h"
 #include "swc_cfg_node.h"
 #include "swc_stats.h"
-#include "stm32h7xx_hal.h"
+#include "stm32u5xx_hal.h"
 #include "myevk_radio.h"
-#include "jpeg_lcd.h"
-#include "packet_handler.h"
-#include "message.h"
-#include "send_radio_data.h"
-#include "log.h"
-#include "lpm.h"
-#include "clock.h"
 #include "uwb_task.h"
-#include "event_manager.h"
 
 /* CONSTANTS *****************************************************
  **************/
 #define SWC_MEM_POOL_SIZE     16000
-
+typedef enum UXS_PacketType_t
+{
+	UXS_PKT_FB_TYPE = 0x54414c46,
+} UXS_PacketType_t;
 
 /* PRIVATE GLOBALS ************************************************************/
 /* ** Wireless Core ** */
@@ -49,6 +44,7 @@ static int32_t tx_timeslots[] = TX_TIMESLOTS;
 /* ** Application Specific ** */
 static uint32_t rx_count;
 
+#define log_trace(MODULE,...)
 /* PRIVATE FUNCTION PROTOTYPE *************************************************/
 static void app_swc_core_init(swc_error_t *err);
 static void conn_rx_success_callback(void *conn);
@@ -232,15 +228,15 @@ void UWB_TX_LinkDisconnected()
 void UWB_RX_LinkConnected()
 {
 	log_trace(MODULE_UWB, "UWB_RX_LinkConnected");
-	UxsEventItem_t event = {.eventId = UXS_EVENT_UWB_LINK_UP};
-	UXS_EventManager_HandleEvent(&event);
+	//UxsEventItem_t event = {.eventId = UXS_EVENT_UWB_LINK_UP};
+	//UXS_EventManager_HandleEvent(&event);
 }
 
 void UWB_RX_LinkDisconnected()
 {
 	log_trace(MODULE_UWB, "UWB_RX_LinkDisconnected");
-	UxsEventItem_t event = {.eventId = UXS_EVENT_UWB_LINK_DOWN};
-	UXS_EventManager_HandleEvent(&event);
+	//UxsEventItem_t event = {.eventId = UXS_EVENT_UWB_LINK_DOWN};
+	//UXS_EventManager_HandleEvent(&event);
 }
 
 UwbResult_t UXS_UwbInit()
@@ -249,7 +245,7 @@ UwbResult_t UXS_UwbInit()
 	uwb_radio_callback_semHandle = osSemaphoreNew(1, 0, &uwb_radio_callback_sem_attributes);
 	uwb_radioCallbackTaskHandle = osThreadNew(UWB_RadioCallbackTask, NULL, &uwb_radioCallbackTask_attributes);
 
-	UXS_PH_SetPreprocessing(&UWB_Preprocesing);
+	//UXS_PH_SetPreprocessing(&UWB_Preprocesing);
 
 	swc_error_t swc_err;
 	log_trace(MODULE_UWB, "app_swc_core_init");
@@ -260,10 +256,10 @@ UwbResult_t UXS_UwbInit()
 		return UXS_UWB_HW_INIT_ERR;
 	}
 	log_trace(MODULE_UWB, "Connecting radio...");
-	set_tx_connection(tx_conn);
+	//set_tx_connection(tx_conn);
 	swc_connect();
 	//Always reset upon init of UWB.
-	UXS_UWB_ResetSendFrame();
+	//UXS_UWB_ResetSendFrame();
 	log_trace(MODULE_UWB, "UXS_UwbInit() done");
 	xSemaphoreGive(uwbSendThreadSem);
 
@@ -276,7 +272,7 @@ UwbResult_t UXS_UwbDeinit()
 	xSemaphoreTake(uwbSendThreadSem,portMAX_DELAY);
 	log_trace(MODULE_UWB, "UXS_UwbDeinit() started");
 	swc_disconnect();
-	set_tx_connection(tx_conn);
+	//set_tx_connection(tx_conn);
 	//Server_UpdateConnectedStatus(false);
 	if(uwb_radioCallbackTaskHandle)
 	{
@@ -390,8 +386,8 @@ static void app_swc_core_init(swc_error_t *err)
             return;
         }
     }
-    swc_connection_set_tx_success_callback(tx_conn, send_tx_success_callback);
-	swc_connection_set_tx_dropped_callback(tx_conn, send_tx_drop_callback);
+    //swc_connection_set_tx_success_callback(tx_conn, send_tx_success_callback);
+	//swc_connection_set_tx_dropped_callback(tx_conn, send_tx_drop_callback);
     swc_connection_set_event_callback(tx_conn, conn_tx_event_callback);
 
     /* ** RX Connection ** */
@@ -452,7 +448,7 @@ static void conn_rx_success_callback(void *conn)
 	uint8_t *payload = NULL;
 	/* Get new payload */
 	uint8_t radio_data_frame_size = swc_connection_receive(rx_conn, &payload, &err);
-	UXS_PH_Receive(payload, radio_data_frame_size, &UXS_PH_ReceiveInfo);
+	//UXS_PH_Receive(payload, radio_data_frame_size, &UXS_PH_ReceiveInfo);
 	/* Free the payload memory */
 	swc_connection_receive_complete(rx_conn, &err);
 }

@@ -134,8 +134,19 @@ void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI5_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(EXTI5_IRQn);
 
+  HAL_NVIC_SetPriority(EXTI6_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(EXTI6_IRQn);
+
 }
 
 /* USER CODE BEGIN 2 */
+void HAL_GPIO_EXTI_Callback( uint16_t GPIO_Pin )
+{
+	if (GPIO_Pin == SR1020_INT_Pin)
+	{
+		Radio_IRQ_Handler();
+	}
 
+
+}
 /* USER CODE END 2 */
