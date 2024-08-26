@@ -22,6 +22,7 @@
 #include "task.h"
 #include "main.h"
 #include "cmsis_os2.h"
+#include "uwb_task.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -142,6 +143,9 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN defaultTask */
   /* Infinite loop */
+
+	UXS_Uwb_Init();
+	UXS_Uwb_Connect();
   for(;;)
   {
     osDelay(1);

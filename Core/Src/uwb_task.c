@@ -29,7 +29,7 @@ typedef enum UXS_PacketType_t
 
 /* PRIVATE GLOBALS ************************************************************/
 /* ** Wireless Core ** */
-__attribute__((section (".d2"), aligned(4))) static uint8_t swc_memory_pool[SWC_MEM_POOL_SIZE];
+static uint8_t swc_memory_pool[SWC_MEM_POOL_SIZE];
 static swc_hal_t hal;
 static swc_node_t *node;
 static swc_connection_t *rx_conn;
@@ -278,7 +278,7 @@ UwbResult_t UXS_UwbDeinit()
 	{
 		vTaskDelete(uwb_radioCallbackTaskHandle);
 		vSemaphoreDelete(uwb_radio_callback_semHandle);
-		UXS_PH_SetPreprocessing(NULL);
+		//UXS_PH_SetPreprocessing(NULL);
 	}
 	xSemaphoreGive(uwbSendThreadSem);
 	log_trace(MODULE_UWB, "UXS_UwbDeinit() done");
