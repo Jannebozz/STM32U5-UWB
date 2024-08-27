@@ -24,7 +24,6 @@ typedef void (*irq_callback)(void);
 
 void DMA_SPI_Rx_Interrupt(void);
 void DMA_SPI_Tx_Interrupt(void);
-void PendSV_Interrupt_Handler(void);
 void Radio_IRQ_Handler(void);
 /* PUBLIC FUNCTION PROTOTYPES *************************************************/
 /** @brief This function set the function callback for the radio pin interrupt.
@@ -38,12 +37,6 @@ void myevk_set_radio_irq_callback(irq_callback callback);
  *  @param[in] callback  External interrupt callback function pointer.
  */
 void myevk_set_radio_dma_rx_callback(irq_callback callback);
-
-/** @brief This function sets the function callback for the pendsv.
- *
- *  @param[in] callback  External interrupt callback function pointer.
- */
-void myevk_set_pendsv_callback(irq_callback callback);
 
 #ifdef __cplusplus
 }

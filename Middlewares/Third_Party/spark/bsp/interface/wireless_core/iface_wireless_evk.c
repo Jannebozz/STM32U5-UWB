@@ -44,5 +44,4 @@ void iface_swc_handlers_init(void)
 {
     myevk_set_radio_irq_callback(swc_radio_irq_handler);
     myevk_set_radio_dma_rx_callback(swc_radio_spi_receive_complete_handler);
-    myevk_set_pendsv_callback(swc_connection_callbacks_processing_handler);
 }

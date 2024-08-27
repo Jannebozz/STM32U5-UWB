@@ -15,7 +15,6 @@ extern SPI_HandleTypeDef hspi1;
 /* PRIVATE FUNCTION PROTOTYPES ************************************************/
 static void default_irq_callback(void);
 /* PRIVATE GLOBALS ************************************************************/
-static uint32_t nested_critical;
 static irq_callback exti1_irq_callback       = default_irq_callback;
 static irq_callback radio1_dma_callback      = default_irq_callback;
 static irq_callback pendsv_irq_callback      = default_irq_callback;
@@ -37,19 +36,6 @@ void myevk_set_radio_irq_callback(irq_callback callback)
 void myevk_set_radio_dma_rx_callback(irq_callback callback)
 {
     radio1_dma_callback = callback;
-}
-
-void myevk_set_pendsv_callback(irq_callback callback)
-{
-    pendsv_irq_callback = callback;
-}
-
-void PendSV_Interrupt_Handler(void)
-{
-	/* USER CODE BEGIN PendSV_IRQn 0 */
-	CLEAR_BIT(SCB->ICSR, SCB_ICSR_PENDSVSET_Msk);
-	pendsv_irq_callback();
-	/* USER CODE END PendSV_IRQn 0 */
 }
 
 void DMA_SPI_Tx_Interrupt(void)
@@ -78,8 +64,6 @@ void DMA_SPI_Rx_Interrupt(void)
 
 void Radio_IRQ_Handler(void)
 {
-	/* EXTI line interrupt detected */
-	//HAL_GPIO_EXTI_IRQHandler(RADIO_IRQ_PIN);
 	exti1_irq_callback();
 }
 
