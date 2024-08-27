@@ -125,7 +125,7 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef* xspiHandle)
     HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
 
     /* HSPI1 interrupt Init */
-    HAL_NVIC_SetPriority(HSPI1_IRQn, 5, 0);
+    HAL_NVIC_SetPriority(HSPI1_IRQn, 8, 0);
     HAL_NVIC_EnableIRQ(HSPI1_IRQn);
   /* USER CODE BEGIN HSPI1_MspInit 1 */
 

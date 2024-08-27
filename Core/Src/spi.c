@@ -113,14 +113,14 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     GPIO_InitStruct.Pin = GPIO_PIN_5;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -131,7 +131,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     handle_GPDMA1_Channel3.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
     handle_GPDMA1_Channel3.Init.Direction = DMA_PERIPH_TO_MEMORY;
     handle_GPDMA1_Channel3.Init.SrcInc = DMA_SINC_FIXED;
-    handle_GPDMA1_Channel3.Init.DestInc = DMA_DINC_FIXED;
+    handle_GPDMA1_Channel3.Init.DestInc = DMA_DINC_INCREMENTED;
     handle_GPDMA1_Channel3.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
     handle_GPDMA1_Channel3.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
     handle_GPDMA1_Channel3.Init.Priority = DMA_LOW_PRIORITY_LOW_WEIGHT;
@@ -157,7 +157,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     handle_GPDMA1_Channel2.Init.Request = GPDMA1_REQUEST_SPI1_TX;
     handle_GPDMA1_Channel2.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
     handle_GPDMA1_Channel2.Init.Direction = DMA_MEMORY_TO_PERIPH;
-    handle_GPDMA1_Channel2.Init.SrcInc = DMA_SINC_FIXED;
+    handle_GPDMA1_Channel2.Init.SrcInc = DMA_SINC_INCREMENTED;
     handle_GPDMA1_Channel2.Init.DestInc = DMA_DINC_FIXED;
     handle_GPDMA1_Channel2.Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
     handle_GPDMA1_Channel2.Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;

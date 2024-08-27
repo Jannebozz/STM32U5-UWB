@@ -20,8 +20,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32u5xx_it.h"
+#include "swc_api.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "myevk_it.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -233,7 +235,8 @@ void GPDMA1_Channel1_IRQHandler(void)
 void GPDMA1_Channel2_IRQHandler(void)
 {
   /* USER CODE BEGIN GPDMA1_Channel2_IRQn 0 */
-
+  DMA_SPI_Tx_Interrupt();
+  return;
   /* USER CODE END GPDMA1_Channel2_IRQn 0 */
   HAL_DMA_IRQHandler(&handle_GPDMA1_Channel2);
   /* USER CODE BEGIN GPDMA1_Channel2_IRQn 1 */
@@ -247,7 +250,8 @@ void GPDMA1_Channel2_IRQHandler(void)
 void GPDMA1_Channel3_IRQHandler(void)
 {
   /* USER CODE BEGIN GPDMA1_Channel3_IRQn 0 */
-
+  DMA_SPI_Rx_Interrupt();
+  return;
   /* USER CODE END GPDMA1_Channel3_IRQn 0 */
   HAL_DMA_IRQHandler(&handle_GPDMA1_Channel3);
   /* USER CODE BEGIN GPDMA1_Channel3_IRQn 1 */
