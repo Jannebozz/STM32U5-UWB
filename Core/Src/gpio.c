@@ -22,7 +22,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "myevk_it.h"
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
