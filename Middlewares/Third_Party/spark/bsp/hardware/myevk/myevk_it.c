@@ -11,11 +11,7 @@
 #include "myevk_it.h"
 
 /* EXTERNS ********************************************************************/
-//extern PCD_HandleTypeDef  hpcd_USB_OTG_FS;
-extern DMA_HandleTypeDef hdma_spi2_rx;
-extern DMA_HandleTypeDef hdma_spi2_tx;
-
-extern SPI_HandleTypeDef hspi2;
+extern SPI_HandleTypeDef hspi1;
 /* PRIVATE FUNCTION PROTOTYPES ************************************************/
 static void default_irq_callback(void);
 /* PRIVATE GLOBALS ************************************************************/
@@ -60,16 +56,9 @@ void DMA_SPI_Tx_Interrupt(void)
 {
 	/* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
 #ifdef USE_ST_HAL_SPI_DRIVER
-		HAL_DMA_IRQHandler(&hdma_spi2_tx);
+		HAL_DMA_IRQHandler((&hspi1)->hdmatx);
 #else
-		DMA_HandleTypeDef *hdma = &hdma_spi2_tx;
-		DMA_Base_Registers  *regs_dma  = (DMA_Base_Registers *)hdma->StreamBaseAddress;
-		/* Clear the transfer complete flag */
-		regs_dma->IFCR = DMA_FLAG_TCIF0_4 << (hdma->StreamIndex & 0x1FU);
-		/* Disable the transfer complete interrupt */
-		((DMA_Stream_TypeDef   *)hdma->Instance)->CR  &= ~(DMA_IT_TC);
-		hdma->State = HAL_DMA_STATE_READY;
-		__HAL_UNLOCK(hdma);
+	#error "This is not implemented for STM32U5 yet"
 #endif
 }
 
@@ -80,24 +69,11 @@ void DMA_SPI_Rx_Interrupt(void)
 {
 	/* USER CODE BEGIN DMA1_Stream2_IRQn 0 */
 #ifdef USE_ST_HAL_SPI_DRIVER
-	HAL_DMA_IRQHandler(&hdma_spi2_rx);
+	HAL_DMA_IRQHandler((&hspi1)->hdmarx);
 #else
-	DMA_HandleTypeDef *hdma = &hdma_spi2_rx;
-	DMA_Base_Registers  *regs_dma  = (DMA_Base_Registers *)hdma->StreamBaseAddress;
-	/* Clear the transfer complete flag */
-	regs_dma->IFCR = DMA_FLAG_TCIF0_4 << (hdma->StreamIndex & 0x1FU);
-	/* Disable the transfer complete interrupt */
-	((DMA_Stream_TypeDef   *)hdma->Instance)->CR  &= ~(DMA_IT_TC);
-	hdma->State = HAL_DMA_STATE_READY;
-	__HAL_UNLOCK(hdma);
-	uint32_t *rx_data = (uint32_t*)((DMA_Stream_TypeDef   *)hdma->Instance)->M0AR;
-	//Currently don´t know how much data we actually should read, so clear whole buffer
-	SCB_InvalidateDCache_by_Addr((uint32_t*)(((uint32_t)rx_data) & ~(uint32_t)0x1F), 224);
+#error "This is not implemented for STM32U5 yet"
 #endif
-
 	radio1_dma_callback();
-
-	/* USER CODE END DMA1_Stream2_IRQn 0 */
 }
 
 void Radio_IRQ_Handler(void)

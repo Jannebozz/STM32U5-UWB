@@ -15,7 +15,7 @@
 #include "../../../Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
 /* PRIVATE GLOBALS ************************************************************/
 
-extern DMA_HandleTypeDef handle_GPDMA1_Channel2;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel3;
 
 typedef struct
 {
@@ -37,21 +37,27 @@ bool myevk_radio_read_irq_pin(void)
 
 void myevk_radio_enable_irq_it(void)
 {
-	HAL_NVIC_EnableIRQ(EXTI6_IRQn);
+	//HAL_NVIC_EnableIRQ(EXTI6_IRQn);
+	SET_BIT(EXTI->IMR1, SR1020_INT_Pin);
 }
 
 void myevk_radio_disable_irq_it(void)
 {
-	HAL_NVIC_DisableIRQ(EXTI6_IRQn);
+	//Mask interrupt
+	CLEAR_BIT(EXTI->IMR1, SR1020_INT_Pin);
+	//Clear any pending
+	SET_BIT(EXTI->RPR1, SR1020_INT_Pin);
 }
 void myevk_radio_enable_dma_irq_it(void)
 {
-    NVIC_EnableIRQ(GPDMA1_Channel2_IRQn);
+	//This should be DMA RX channel
+    NVIC_EnableIRQ(GPDMA1_Channel3_IRQn);
 }
 
 void myevk_radio_disable_dma_irq_it(void)
 {
-    NVIC_DisableIRQ(GPDMA1_Channel2_IRQn);
+	//This should be DMA RX channel
+    NVIC_DisableIRQ(GPDMA1_Channel3_IRQn);
 }
 
 void myevk_radio_set_shutdown_pin(void)
@@ -93,73 +99,10 @@ void myevk_radio_spi_transfer_full_duplex_blocking(uint8_t *tx_data, uint8_t *rx
 void myevk_radio_spi_transfer_full_duplex_non_blocking(uint8_t *tx_data, uint8_t *rx_data, uint16_t size)
 {
 #ifdef USE_ST_HAL_SPI_DRIVER
-    myevk_radio_spi_reset_cs();
     HAL_SPI_TransmitReceive_DMA(&hspi1, tx_data,rx_data,size);
-    __HAL_DMA_DISABLE_IT(&handle_GPDMA1_Channel2, DMA_IT_HT);
-
+    __HAL_DMA_DISABLE_IT(&handle_GPDMA1_Channel3, DMA_IT_HT); //Disable HalfTransfer interrupt
 #else
-    SCB_CleanDCache_by_Addr((uint32_t*)(((uint32_t)tx_data) & ~(uint32_t)0x1F),size + 32);
-
-    hspi2.State = HAL_SPI_STATE_BUSY_TX_RX;
-    myevk_radio_spi_reset_cs();
-    // Enable SPI peripheral
-    __HAL_SPI_DISABLE(&hspi2);
-    DMA_HandleTypeDef *hdmarx = (&hspi2)->hdmarx;
-    DMA_HandleTypeDef *hdmatx = (&hspi2)->hdmatx;
-
-    // Reset the Tx/Rx DMA bits
-    CLEAR_BIT((&hspi2)->Instance->CFG1, SPI_CFG1_TXDMAEN | SPI_CFG1_RXDMAEN);
-
-    // Disable the peripheral
-    __HAL_DMA_DISABLE(hdmarx);
-
-    DMA_Base_Registers  *regs_dma  = (DMA_Base_Registers *)hdmarx->StreamBaseAddress;
-    // Clear all interrupt flags at correct offset within the register
-    regs_dma->IFCR = 0x3FUL << (hdmarx->StreamIndex & 0x1FU);
-
-    // Clear DBM bit - No double buffering
-    ((DMA_Stream_TypeDef *)hdmarx->Instance)->CR &= (uint32_t)(~DMA_SxCR_DBM);
-    // Configure DMA Stream data length
-    ((DMA_Stream_TypeDef *)hdmarx->Instance)->NDTR = size;
-    // Configure DMA Stream source address
-    ((DMA_Stream_TypeDef *)hdmarx->Instance)->PAR = (uint32_t)&(&hspi2)->Instance->RXDR;
-        // Configure DMA Stream destination address
-    ((DMA_Stream_TypeDef *)hdmarx->Instance)->M0AR = (uint32_t)rx_data;
-    // Enable Common interrupts
-    MODIFY_REG(((DMA_Stream_TypeDef *)hdmarx->Instance)->CR, (DMA_IT_TC | DMA_IT_TE | DMA_IT_DME | DMA_IT_HT), (DMA_IT_TC | DMA_IT_TE | DMA_IT_DME));
-    // Enable the Peripheral
-    __HAL_DMA_ENABLE(hdmarx);
-
-    // Enable Rx DMA Request
-    SET_BIT((&hspi2)->Instance->CFG1, SPI_CFG1_RXDMAEN);
-
-    __HAL_DMA_DISABLE(hdmatx);
-
-    regs_dma  = (DMA_Base_Registers *)hdmatx->StreamBaseAddress;
-    // Clear all interrupt flags at correct offset within the register
-    regs_dma->IFCR = 0x3FUL << (hdmatx->StreamIndex & 0x1FU);
-
-    // Configure DMA Stream data length
-    ((DMA_Stream_TypeDef *)hdmatx->Instance)->NDTR = size;
-    // Configure DMA Stream source address
-    ((DMA_Stream_TypeDef *)hdmatx->Instance)->PAR = (uint32_t)&(&hspi2)->Instance->TXDR;
-
-    // Configure DMA Stream destination address
-    ((DMA_Stream_TypeDef *)hdmatx->Instance)->M0AR = (uint32_t)tx_data;
-    // Enable the Peripheral
-    __HAL_DMA_ENABLE(hdmatx);
-
-
-    MODIFY_REG((&hspi2)->Instance->CR2, SPI_CR2_TSIZE, size);
-    // Enable Tx DMA Request
-    SET_BIT((&hspi2)->Instance->CFG1, SPI_CFG1_TXDMAEN);
-
-    // Enable SPI peripheral
-    __HAL_SPI_ENABLE(&hspi2);
-    __HAL_SPI_ENABLE_IT(&hspi2,SPI_IT_EOT);
-
-    // Master transfer start
-    SET_BIT((&hspi2)->Instance->CR1, SPI_CR1_CSTART);
+	#error "This is not implemented for STM32U5 yet"
 #endif
 }
 
