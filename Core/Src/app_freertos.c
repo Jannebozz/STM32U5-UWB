@@ -143,8 +143,8 @@ void StartDefaultTask(void *argument)
   /* USER CODE BEGIN defaultTask */
   /* Infinite loop */
 
-	UXS_Uwb_Init();
-	UXS_Uwb_Connect();
+	//UXS_Uwb_Init();
+	//UXS_Uwb_Connect();
   for(;;)
   {
     osDelay(1);
